@@ -10,12 +10,6 @@ const root = createRoot(container)
 root.render(
     <React.StrictMode>
         <BrowserRouter>
-            <header>
-                <nav>
-                    <Link to="/">Home</Link> |{' '}
-                    <Link to="/articles">Articles</Link>
-                </nav>
-            </header>
             <ArticlesRouter />
         </BrowserRouter>
     </React.StrictMode>
