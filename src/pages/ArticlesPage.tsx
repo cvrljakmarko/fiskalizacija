@@ -11,7 +11,8 @@ export default function ArticlesPage() {
         success,
         createArticleItem,
         updateArticleItem,
-        deleteArticleItem
+        deleteArticleItem,
+        reload
     } = useArticleCrud()
 
     const [name, setName] = useState('')
@@ -24,11 +25,11 @@ export default function ArticlesPage() {
     const [editName, setEditName] = useState('')
     const [editPrice, setEditPrice] = useState<number | ''>('')
 
-    // --- Handlers ---
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
         if (!name || price === '') return
-        await createArticleItem({ name, price: Number(price) })
+        const created = await createArticleItem({ name, price: Number(price) })
+        if (created) await reload()
         setName('')
         setPrice('')
     }
@@ -75,8 +76,6 @@ export default function ArticlesPage() {
             {success && (
                 <p className="mb-3 text-sm text-green-600">{success}</p>
             )}
-
-            {/* Create Form */}
             <form
                 className="flex flex-wrap items-end gap-2 mb-6"
                 onSubmit={handleSubmit}
@@ -116,7 +115,6 @@ export default function ArticlesPage() {
                 <Button type="submit">Create</Button>
             </form>
 
-            {/* Articles Table */}
             <div className="overflow-x-auto border rounded">
                 <table className="min-w-full text-sm">
                     <thead className="bg-gray-100 text-gray-700">
@@ -156,7 +154,7 @@ export default function ArticlesPage() {
                                     </td>
                                     <td className="px-4 py-2 text-right">
                                         <Button
-                                            variant="secondary"
+                                            variant="primary"
                                             className="mr-2"
                                             onClick={() =>
                                                 openEditModal(article)
@@ -165,7 +163,7 @@ export default function ArticlesPage() {
                                             Edit
                                         </Button>
                                         <Button
-                                            variant="primary"
+                                            variant="secondary"
                                             onClick={() =>
                                                 openDeleteModal(article)
                                             }
@@ -179,7 +177,6 @@ export default function ArticlesPage() {
                 </table>
             </div>
 
-            {/* --- Edit Modal --- */}
             {editModalOpen && (
                 <Modal onClose={closeModals} title="Edit Article">
                     <div className="space-y-3">
@@ -222,7 +219,6 @@ export default function ArticlesPage() {
                 </Modal>
             )}
 
-            {/* --- Delete Modal --- */}
             {deleteModalOpen && selectedArticle && (
                 <Modal onClose={closeModals} title="Confirm Deletion">
                     <p>
@@ -230,10 +226,10 @@ export default function ArticlesPage() {
                         <strong>{selectedArticle.name}</strong>?
                     </p>
                     <div className="flex justify-end gap-2 mt-4">
-                        <Button variant="primary" onClick={closeModals}>
+                        <Button variant="secondary" onClick={closeModals}>
                             Cancel
                         </Button>
-                        <Button variant="secondary" onClick={confirmDelete}>
+                        <Button variant="primary" onClick={confirmDelete}>
                             Delete
                         </Button>
                     </div>
@@ -243,7 +239,6 @@ export default function ArticlesPage() {
     )
 }
 
-/** --- Simple Reusable Modal Component --- */
 function Modal({
     title,
     children,
