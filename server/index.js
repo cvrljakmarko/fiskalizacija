@@ -24,7 +24,7 @@ const toId = (n) => String(n).padStart(4, '0')
 
 // --- Load once into memory ---
 function loadInitialTariffs() {
-    const file = path.join(__dirname, 'data/tariffs.json')
+    const file = path.join(__dirname, 'data/articles.json')
     const raw = fs.readFileSync(file, 'utf-8')
     return JSON.parse(raw)
 }
@@ -37,19 +37,19 @@ let nextSeq = tariffs.reduce((max, t) => Math.max(max, toNumber(t.id)), 0) + 1
 // --- Routes ---
 
 // READ (all)
-app.get('/api/tariffs', (req, res) => {
+app.get('/api/articles', (req, res) => {
     res.json(tariffs)
 })
 
 // READ (by id)
-app.get('/api/tariffs/:id', (req, res) => {
+app.get('/api/articles/:id', (req, res) => {
     const t = tariffs.find(x => String(x.id) === String(req.params.id))
     if (!t) return res.status(404).json({ error: 'Tariff not found' })
     res.json(t)
 })
 
 // CREATE (auto-assign ID, in-memory only)
-app.post('/api/tariffs', (req, res) => {
+app.post('/api/articles', (req, res) => {
     const { name, price } = req.body || {}
 
     if (!name || typeof price !== 'number') {
@@ -66,7 +66,7 @@ app.post('/api/tariffs', (req, res) => {
     res.status(201).json(newTariff)
 })
 
-app.put('/api/tariffs/:id', (req, res) => {
+app.put('/api/articles/:id', (req, res) => {
     const id = String(req.params.id)
     const { name, price } = req.body || {}
     if (!name || typeof price !== 'number') {
@@ -78,7 +78,7 @@ app.put('/api/tariffs/:id', (req, res) => {
     return res.json(tariffs[i])
 })
 
-app.patch('/api/tariffs/:id', (req, res) => {
+app.patch('/api/articles/:id', (req, res) => {
     const id = String(req.params.id)
     const i = tariffs.findIndex(t => String(t.id) === id)
     if (i === -1) return res.status(404).json({ error: 'Tariff not found' })
@@ -89,7 +89,7 @@ app.patch('/api/tariffs/:id', (req, res) => {
     return res.json(tariffs[i])
 })
 
-app.delete('/api/tariffs/:id', (req, res) => {
+app.delete('/api/articles/:id', (req, res) => {
     const id = String(req.params.id)
     const i = tariffs.findIndex(t => String(t.id) === id)
     if (i === -1) return res.status(404).json({ error: 'Tariff not found' })

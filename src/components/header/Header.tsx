@@ -37,7 +37,7 @@ export default function Header() {
                         }`
                     }
                 >
-                    Articles
+                    Invoices
                 </NavLink>
             </nav>
         </div>
