@@ -1,7 +1,6 @@
 import { AxiosResponse } from 'axios'
 import client from '../api/client'
 import type { Articles } from '../types/articles'
-import { A } from 'vitest/dist/chunks/environment.d.cL3nLXbE.js'
 
 export const fetchArticles = async () => {
     try {

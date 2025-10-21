@@ -5,6 +5,18 @@ const client = axios.create({
     headers: { 'Content-Type': 'application/json' }
 })
 
+// Attach Authorization if token exists
+client.interceptors.request.use((config) => {
+    try {
+        const token = window.localStorage.getItem('auth_token')
+        if (token) {
+            config.headers = config.headers ?? {}
+            config.headers.Authorization = `Bearer ${token}`
+        }
+    } catch {}
+    return config
+})
+
 client.interceptors.response.use(
     (response: AxiosResponse) => response,
     (error: AxiosError) => {
