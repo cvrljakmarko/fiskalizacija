@@ -1,6 +1,8 @@
 import { Link, NavLink } from 'react-router-dom'
+import { useAuth } from '@/context/AuthContext'
 
 export default function Header() {
+    const { user, logout } = useAuth()
     return (
         <div className={`flex items-center justify-between py-3`}>
             <Link
@@ -37,8 +39,30 @@ export default function Header() {
                         }`
                     }
                 >
-                    Invoices
+                    Articles
                 </NavLink>
+                {user ? (
+                    <button
+                        onClick={() => void logout()}
+                        className="text-sm font-medium text-gray-600 hover:text-red-600 transition-colors"
+                        aria-label="Sign out"
+                    >
+                        Sign out ({user.name})
+                    </button>
+                ) : (
+                    <NavLink
+                        to="/login"
+                        className={({ isActive }) =>
+                            `text-sm font-medium transition-colors ${
+                                isActive
+                                    ? 'text-blue-600'
+                                    : 'text-gray-600 hover:text-blue-500'
+                            }`
+                        }
+                    >
+                        Sign in
+                    </NavLink>
+                )}
             </nav>
         </div>
     )
